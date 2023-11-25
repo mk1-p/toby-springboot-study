@@ -23,6 +23,7 @@ public class TobySpringBootApplication {
         // Container Control Object
         GenericApplicationContext applicationContext = new GenericApplicationContext();
         // Register Bean
+        // Similar Singleton Pattern - Call Spring Container as Singleton Registry
         applicationContext.registerBean(HelloController.class);
         // Refresh And Create Bean Object
         applicationContext.refresh();
