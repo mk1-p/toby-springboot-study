@@ -29,6 +29,17 @@ import java.io.IOException;
 @ComponentScan
 public class TobySpringBootApplication {
 
+    @Bean
+    public ServletWebServerFactory servletWebServerFactory() {
+        return new TomcatServletWebServerFactory();
+    }
+
+    @Bean
+    public DispatcherServlet dispatcherServlet() {
+        return new DispatcherServlet();
+    }
+
+
     public static void main(String[] args) {
         // Container Control Object
         // Convert GenericWebApplicationContext And Use DispatcherServlet
@@ -37,14 +48,15 @@ public class TobySpringBootApplication {
             protected void onRefresh() {
                 super.onRefresh();
 
-                // Create Servlet Server Factory(Tomcat)
-                // If you want other WebServer, Modify TomcatServletWebServerFactory
-                ServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
-                // Get WebServer Object
-                // -> Dispatcher Servlet Convert!
+                // 등록된 Bean을 가져온다.
+                ServletWebServerFactory serverFactory = this.getBean(ServletWebServerFactory.class);
+                DispatcherServlet dispatcherServlet = this.getBean(DispatcherServlet.class);
+                // Application Context를 입력하지 않더라도
+                // Spring Context가 자동으로 주입해준다.
+                // dispatcherServlet.setApplicationContext(this);
+
                 WebServer webServer = serverFactory.getWebServer(servletContext -> {
-                    servletContext.addServlet("dispatcherServlet",
-                            new DispatcherServlet(this))
+                    servletContext.addServlet("dispatcherServlet", dispatcherServlet)
                             .addMapping("/*");
                 });
                 // Run WebServer
