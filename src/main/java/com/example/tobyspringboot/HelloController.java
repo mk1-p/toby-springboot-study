@@ -1,7 +1,13 @@
 package com.example.tobyspringboot;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.util.Objects;
 
+@RequestMapping("/hello")
 public class HelloController {
     private final HelloService helloService;
 
@@ -12,8 +18,14 @@ public class HelloController {
         this.helloService = helloService;
     }
 
-    public String hello(String name) {
 
+    // Spring 으로 반환할 경우 기본적으로 view를 찾게된다
+    // ResponseBody를 붙여줌으로써 String 타입을 반환한다는 의미를 부여해준다.
+    // RestController 를 사용하면 자동으로 ResponseBody 형태로 인식하게 되므로 별도로 작성해줄 필요가 없다.
+    @GetMapping
+    @ResponseBody
+    public String hello(String name) {
+        System.out.println("요청까지 들어왔나??");
         return helloService.sayHello(Objects.requireNonNull(name));
     }
 
