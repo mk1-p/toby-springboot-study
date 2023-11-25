@@ -1,5 +1,6 @@
 package com.example.tobyspringboot;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -7,6 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
 
+// @Controller와 차이점은
+// @ResponseBody 가 메타 어노테이션으로 붙어 있어
+// view를 기본 반환타입으로 찾이 않게 된다.
+@RestController
 @RequestMapping("/hello")
 public class HelloController {
     private final HelloService helloService;
