@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
+import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,14 @@ import java.io.IOException;
 public class TobySpringBootApplication {
 
     public static void main(String[] args) {
+        // Container Control Object
+        GenericApplicationContext applicationContext = new GenericApplicationContext();
+        // Register Bean
+        applicationContext.registerBean(HelloController.class);
+        // Refresh And Create Bean Object
+        applicationContext.refresh();
+
+
         // Create Servlet Server Factory(Tomcat)
         // If you want other WebServer, Modify TomcatServletWebServerFactory
         ServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
@@ -31,14 +40,15 @@ public class TobySpringBootApplication {
                     // 인증, 보안, 다국어, 공통 기능 등!
                     // url
                     if (req.getRequestURI().equals("/hello") && req.getMethod().equals(HttpMethod.GET.name() )) {
-                        String name = req.getParameter("name");
 
-                        resp.setStatus(HttpStatus.OK.value());
-                        resp.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
-                        resp.getWriter().print("Hello Servlet! "+name);
-                    }
-                    else if (req.getRequestURI().equals("/user")) {
-                        //
+                        // Bind Parameter
+                        String name = req.getParameter("name");
+                        // Get Hello Controller Bean
+                        HelloController helloController = applicationContext.getBean(HelloController.class);
+                        String hello = helloController.hello(name);
+
+                        resp.setContentType(MediaType.TEXT_PLAIN_VALUE);
+                        resp.getWriter().print(hello);
                     }
                     else {
                         resp.setStatus(HttpStatus.NOT_FOUND.value());
