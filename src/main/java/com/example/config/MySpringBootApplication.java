@@ -1,7 +1,11 @@
-package com.example.tobyspringboot;
+package com.example.config;
 
+import com.example.config.EnableMyAutoConfiguration;
+import com.example.config.autoconfig.DispatcherServletConfig;
+import com.example.config.autoconfig.TomcatWebServerConfig;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -17,5 +21,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Configuration
 @ComponentScan
-public @interface MySpringBootAnnotation  {
+@EnableMyAutoConfiguration
+public @interface MySpringBootApplication {
 }
