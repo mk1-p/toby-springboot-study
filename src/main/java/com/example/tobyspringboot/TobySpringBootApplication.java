@@ -25,19 +25,10 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 import java.io.IOException;
 
-@Configuration
-@ComponentScan
+@MySpringBootAnnotation
 public class TobySpringBootApplication {
 
-    @Bean
-    public ServletWebServerFactory servletWebServerFactory() {
-        return new TomcatServletWebServerFactory();
-    }
 
-    @Bean
-    public DispatcherServlet dispatcherServlet() {
-        return new DispatcherServlet();
-    }
 
     public static void main(String[] args) {
         SpringApplication.run(TobySpringBootApplication.class, args);
