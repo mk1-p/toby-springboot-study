@@ -29,8 +29,8 @@ public class HelloController {
     // RestController 를 사용하면 자동으로 ResponseBody 형태로 인식하게 되므로 별도로 작성해줄 필요가 없다.
     @GetMapping
     public String hello(String name) {
-        System.out.println("요청까지 들어왔나??");
-        return helloService.sayHello(Objects.requireNonNull(name));
+        if (name == null || name.trim().length() == 0) throw new IllegalArgumentException();
+        return helloService.sayHello(name);
     }
 
 }
