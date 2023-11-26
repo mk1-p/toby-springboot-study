@@ -33,7 +33,7 @@ public class HelloApiTest {
                 // 처음부분과 일치하는지
                 .startsWith(MediaType.TEXT_PLAIN_VALUE);
         // body Hello Spring
-        Assertions.assertThat(res.getBody()).isEqualTo("hello "+name);
+        Assertions.assertThat(res.getBody()).isEqualTo("*hello "+name+"*");
 
     }
 
