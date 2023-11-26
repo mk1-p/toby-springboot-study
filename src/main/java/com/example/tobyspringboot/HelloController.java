@@ -28,7 +28,6 @@ public class HelloController {
     // ResponseBody를 붙여줌으로써 String 타입을 반환한다는 의미를 부여해준다.
     // RestController 를 사용하면 자동으로 ResponseBody 형태로 인식하게 되므로 별도로 작성해줄 필요가 없다.
     @GetMapping
-    @ResponseBody
     public String hello(String name) {
         System.out.println("요청까지 들어왔나??");
         return helloService.sayHello(Objects.requireNonNull(name));
