@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.core.type.AnnotatedTypeMetadata;
+import org.springframework.util.ClassUtils;
 
 @MyAutoConfiguration
 // Condition 상태값을 반환함으로써 Spring에게 어떤 WebServer 를 사용할것인지 알려준다.
@@ -26,7 +27,8 @@ public class JettyWebServerConfig {
         // 반대로 Tomcat은 false로 설정
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-             return true;
+            return ClassUtils.isPresent("org.eclipse.jetty.server.Server",
+                    context.getClassLoader());
         }
     }
 }

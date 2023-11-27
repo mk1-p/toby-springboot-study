@@ -16,7 +16,10 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation ('org.springframework.boot:spring-boot-starter-web'){
+        // 라이브러리의 설치 예외를 하는 경우 톰켓이 web 기본 내장이기에 빼주고 테스트!
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+    }
     implementation 'org.springframework.boot:spring-boot-starter-jetty'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
