@@ -2,6 +2,7 @@ package com.example.config.autoconfig;
 
 import com.example.config.ConditionalMyOnClass;
 import com.example.config.MyAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.embedded.jetty.JettyServletWebServerFactory;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
@@ -19,6 +20,7 @@ public class JettyWebServerConfig {
 
     // 보통은 Bean의 이름은 메소드 이름을 따라간다.
     @Bean("jettyWebServerFactory")
+    @ConditionalOnMissingBean
     public ServletWebServerFactory servletWebServerFactory() {
         return new JettyServletWebServerFactory();
     }
