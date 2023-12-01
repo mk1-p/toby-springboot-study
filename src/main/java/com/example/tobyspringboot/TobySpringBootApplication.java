@@ -1,42 +1,50 @@
 package com.example.tobyspringboot;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.annotation.PostConstruct;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.boot.web.server.WebServer;
-import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.boot.autoconfigure.condition.ConditionEvaluationReport;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.io.IOException;
-
+@SpringBootApplication
 public class TobySpringBootApplication {
 
-    public static void main(String[] args) {
-        // Create Servlet Server Factory(Tomcat)
-        // If you want other WebServer, Modify TomcatServletWebServerFactory
-        ServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
-        // Get WebServer Object
-        WebServer webServer = serverFactory.getWebServer(servletContext -> {
-            servletContext.addServlet("hello", new HttpServlet() {
-                @Override
-                protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private final JdbcTemplate jdbcTemplate;
 
-                    String name = req.getParameter("name");
-
-                    resp.setStatus(HttpStatus.OK.value());
-                    resp.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
-                    resp.getWriter().print("Hello Servlet! "+name);
-                }
-            }).addMapping("/hello");
-        });
-        // Run WebServer
-        webServer.start();
+    public TobySpringBootApplication(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
+
+    @PostConstruct
+    void init() {
+        jdbcTemplate.execute("create table if not exists hello(name varchar(50) primary key, count int)");
+    }
+
+
+    @Bean
+    ApplicationRunner applicationRunner(Environment env, ConditionEvaluationReport report) {
+        // Condition 조건에 부합하는 로그 출력 코드
+        return args -> {
+            report.getConditionAndOutcomesBySource().entrySet().stream()
+                    .filter(co -> co.getValue().isFullMatch())
+                    .filter(co -> co.getKey().indexOf("Jmx") < 0)
+                    .forEach(co -> {
+                        System.out.println(co.getKey());
+                        co.getValue().forEach(c -> {
+                            System.out.println("\t"+c.getOutcome());
+                        });
+                    });
+        };
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(TobySpringBootApplication.class, args);
+    }
+
+
+
 
 }
