@@ -3,12 +3,15 @@ package com.example.tobyspringboot;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
+// 톰켓 서버를 정해진 포트로 열어주도록 한다.
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class HelloApiTest {
 
     @Test
@@ -24,7 +27,7 @@ public class HelloApiTest {
 
         // url, response body type, parameter binding
         ResponseEntity<String> res = rest
-                .getForEntity("http://localhost:8080/hello?name={name}", String.class, name);
+                .getForEntity("http://localhost:9090/app/hello?name={name}", String.class, name);
 
         // Status Code 200
         Assertions.assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
